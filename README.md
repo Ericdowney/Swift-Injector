@@ -1,8 +1,10 @@
 # Swift Injector
 
+![Swift](https://github.com/Ericdowney/Swift-Injector/workflows/Swift/badge.svg?event=status)
+
 This framework is meant to be a minimal dependency injection framework.  Dynamically register app dependencies to be used throughout your application.  This framework is to help write swift tests easier.  When using iOS singleton objects such as NotificationCenter or UserDefaults, there are hoops you have to jump through to make your code testable in XCTest.  Since there is no way to dynamically mock a Swift object the normal routine is to pull these objects out to a class level and then introduce a mock for test.  However, when writing extensions this is not so easy.  Let's look at a couple examples
 
-Normal implemenation
+Normal implementation
 ```swift
 import UIKit
 
