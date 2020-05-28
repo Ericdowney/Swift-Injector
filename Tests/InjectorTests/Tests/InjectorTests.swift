@@ -31,6 +31,17 @@ final class InjectorTests: XCTestCase {
         XCTAssertIdentity(Injector.shared.resolvables[2].value as! TestResolvable, obj3)
     }
     
+    func test_shouldAddResolvableObjectToInjectorResolvablesListByName() throws {
+        let obj1 = TestResolvable()
+        let obj2 = TestResolvable()
+        
+        Injector.shared.register(obj1, with: "Object-1")
+        Injector.shared.register(obj2, with: "Object-2")
+        
+        XCTAssertIdentity(try Injector.shared.resolve(with: "Object-1"), obj1)
+        XCTAssertIdentity(try Injector.shared.resolve(with: "Object-2"), obj2)
+    }
+    
     func test_shouldRemoveResolvableObjectFromInjectorResolvableList() {
         let obj = TestResolvable()
         Injector.shared.register(obj)
@@ -38,6 +49,20 @@ final class InjectorTests: XCTestCase {
         Injector.shared.unregister(obj)
         
         XCTAssertEmpty(Injector.shared.resolvables)
+    }
+    
+    func test_shouldRemoveResolvableObjectFromInjectorResolvableListByName() throws {
+        let obj1 = TestResolvable()
+        let obj2 = TestResolvable()
+        Injector.shared.register(obj1, with: "Object-1")
+        Injector.shared.register(obj2, with: "Object-2")
+        
+        Injector.shared.unregister(objectWith: "Object-1")
+        
+        let actualObj1: TestResolvable? = try? Injector.shared.resolve(with: "Object-1")
+        XCTAssertEqual(Injector.shared.resolvables.count, 1)
+        XCTAssertNil(actualObj1)
+        XCTAssertIdentity(try Injector.shared.resolve(with: "Object-2"), obj2)
     }
     
     func test_shouldRemoveAllResolvableObjectsFromInjectorResolvableList() {
@@ -69,11 +94,11 @@ final class InjectorTests: XCTestCase {
         XCTAssertNil(result)
     }
     
-    func test_shouldResolveNonOptionalObjectFromInjectorWhenObjectIsRegistered() {
+    func test_shouldResolveNonOptionalObjectFromInjectorWhenObjectIsRegistered() throws {
         let obj = TestResolvable()
         Injector.shared.register(obj)
         
-        let result: TestResolvable = try! .resolve()
+        let result: TestResolvable = try .resolve()
         
         XCTAssertIdentity(obj, result)
     }
